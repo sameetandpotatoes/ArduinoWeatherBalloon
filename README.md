@@ -20,3 +20,7 @@
 ![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0026.JPG)
 ![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0029.JPG)
 ![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0039.JPG)
+
+# Schematic
+![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/Breadboard.png)
+![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/Schematic.png)
