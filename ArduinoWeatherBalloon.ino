@@ -4,7 +4,7 @@
 #include <Adafruit_GPS.h>
 #include <SoftwareSerial.h>
 #include <Adafruit_Sensor.h>
-#include <Adafruit_TSL2561.h>
+#include "TSL2561.h"
 #include <SPI.h>
 #include <Wire.h>
 #include "RTClib.h"
@@ -37,7 +37,7 @@ RTC_DS1307 RTC;
 int previousMillis = 0;
 int interval = 1200000; //Time in milliseconds between writing to the SD card.
 
-File dataFile; //Name of file we are writing 
+File dataFile; //Name of file we are writing to on the SD card
 
 void setup()
 {
@@ -52,12 +52,15 @@ void setup()
   Wire.begin();
   RTC.begin();
   
+  //For debugging the code
+  Serial.begin(9600);
+  
   if (!RTC.isrunning())
   {
-    // following line sets the RTC to the date & time this sketch was compiled
+    // following line sets the RTC to the date & time this sketch was compiled as a fail-safe
     RTC.adjust(DateTime(__DATE__, __TIME__));
   }
-}
+} // end of setup
 
 void loop()
 {
@@ -71,7 +74,7 @@ void loop()
       switch (i)
       {
         case 0: 
-          getGeigerData();  
+          getGeigerData();
           break;
         case 1: 
           getGas1Data();
@@ -100,33 +103,35 @@ void loop()
         }
     }
     dataFile.close(); //Closing data file
-    previousMillis = currentMillis;   
+    previousMillis = currentMillis;  //Resetting timer   
   }
-}
-
+} // end of loop
 void getGeigerData()
 {
   dataFile.print("Geiger: ");
   dataFile.println(analogRead(13));
-}
+  Serial.println("Geiger: " + analogRead(13));
+} //end of getGeigerData()
 void getGas1Data()
 {
   dataFile.print("Inside Gas Sensor: ");
   dataFile.println(analogRead(14));
-}
+  Serial.println("Gas 1: " + analogRead(14));
+} //end of getGas1Data()
 void getGas2Data()
 {
   dataFile.print("Outside Gas Sensor: ");
   dataFile.println(analogRead(15));
-}
+  Serial.println("Gas 2: " + analogRead(15));
+} //end of getGas2Data()
 void getGPSData()
 {  
   Adafruit_GPS GPS(&Serial1);
   GPS.begin(9600); // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   
-  // Setting the update rate
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate 
+  // Setting the update rate to 1 Hz
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
  
   if (GPS.newNMEAreceived()) // if a sentence is received, we can check the checksum, parse it...
   {
@@ -136,8 +141,10 @@ void getGPSData()
       return;  // we can fail to parse a sentence in which case we should just wait for another
   }    
   dataFile.print("Fix: "); dataFile.print((int)GPS.fix);
+  Serial.print((int)GPS.fix);
+  Serial.println((int) GPS.fixquality);
   dataFile.print(" quality: "); dataFile.println((int)GPS.fixquality); 
-  if (GPS.fix)
+  if (GPS.fix) //If we get a fix, print the rest of the data
   {
       dataFile.print("Location: ");
       dataFile.print((GPS.latitude / 100.0), 4); dataFile.print(GPS.lat);
@@ -148,7 +155,7 @@ void getGPSData()
       dataFile.print("Altitude: "); dataFile.println(GPS.altitude);
       dataFile.print("Satellites: "); dataFile.println((int)GPS.satellites);
   }
-}
+} //end of getGPSData()
 void getClockData()
 {
    DateTime now = RTC.now(); 
@@ -164,8 +171,9 @@ void getClockData()
    dataFile.print(':');
    dataFile.print(now.second(), DEC);
    dataFile.println();
-   dataFile.println(); //Extra new line for increased readability
-}
+   dataFile.println(); //Extra new line for increased readability on the SD Card
+   Serial.println(now.year(), DEC);
+} //end of getClockData()
 //Helper method for reading the barometer
 unsigned int readRegister(byte thisRegister)
 {
@@ -176,7 +184,7 @@ unsigned int readRegister(byte thisRegister)
     result = SPI.transfer(0x00);
     digitalWrite(chipSelectPin, HIGH);
     return(result);
-}
+} // end of readRegister()
 void getBarometerData()
 {
     float A0_;
@@ -186,7 +194,8 @@ void getBarometerData()
 
     SPI.begin();   
 
-    // read registers that contain the chip-unique parameters to do the math
+    // Reading registers that contain the chip-unique parameters to do the math  
+    // These constants are defined at the top of this program and are special for the barometer only
     unsigned int A0H = readRegister(A0MSB);
     unsigned int A0L = readRegister(A0LSB);
     A0_ = (A0H << 5) + (A0L >> 3) + (A0L & 0x07) / 8.0;
@@ -231,21 +240,22 @@ void getBarometerData()
     unsigned long temp  = ((tempH *256) + tempL)/64;
   
     float pressure = A0_+(B1_+C12_*temp)*press+B2_*temp;
-    float preskPa = pressure*  (65.0/1023.0)+50.0;
+    float preskPa = pressure*  (65.0/1023.0)+50.0; //Converting pressure to Pascals
     dataFile.print("Barometer Presure (pa): ");
     dataFile.println(preskPa);
-}
+    Serial.print("Barometer Pressure: ");
+    Serial.println(preskPa);
+} //end of getBarometerData()
 void getAccelerometerData()
 {
-  const int xPin = 8; //Pin for x axis direction
-  const int yPin = 9; //Pin for y axis direction
-  const int zPin = 10; //Pin for z axis direction
+  int xPin = 8; //Pin for x axis direction
+  int yPin = 9; //Pin for y axis direction
+  int zPin = 10; //Pin for z axis direction
   
   /*
-    The minimum and maximum values that came from
-    the accelerometer. These
-    constants vary from person to person, so expect
-    to change it based on your own accelerometer.
+    The minimum and maximum values that came from the accelerometer. These constants vary on each Arduino,
+    so expect to change it based on your own accelerometer. To calculate these values, analogRead each of
+    the pins and see what values are outputted to the Serial Monitor.
   */
   int minValx = 333;
   int maxValx = 438;
@@ -259,6 +269,7 @@ void getAccelerometerData()
   double y;
   double z;
 
+  //Reading raw data from each of the pins
   int xRead = analogRead(xPin);
   int yRead = analogRead(yPin);
   int zRead = analogRead(zPin);
@@ -289,33 +300,56 @@ void getAccelerometerData()
   dataFile.print(" ");
   dataFile.print(zAng);
   dataFile.println();
-}
-
+  Serial.print("Orientation: ");
+  Serial.print(xAng);
+  Serial.print(yAng);
+  Serial.println(zAng);
+} //end of getAccelerometerData()
 void getLuminosityData()
 {
-  Adafruit_TSL2561 tsl = Adafruit_TSL2561(TSL2561_ADDR_FLOAT, 12345);
+  TSL2561 tsl(TSL2561_ADDR_FLOAT); 
 
-  tsl.enableAutoGain(true);          /* Auto-gain ... switches automatically between 1x and 16x */
+   // You can change the gain on the fly, to adapt to brighter/dimmer light situations
+  //tsl.setGain(TSL2561_GAIN_0X);         // set no gain (for bright situtations)
+  tsl.setGain(TSL2561_GAIN_16X);      // set 16x gain (for dim situations)
 
-  /* Changing the integration time gives you better sensor resolution (402ms = 16-bit data) */
-  tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_13MS);      // fast but low resolution
-  // tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_101MS);  // medium resolution and speed
-  // tsl.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);  // 16-bit data but slowest conversions
-
-  /* Get a new sensor event */
-  sensors_event_t event;
-  tsl.getEvent(&event);
+  // Changing the integration time gives you a longer time over which to sense light
+  // longer timelines are slower, but are good in very low light situtations!
+  tsl.setTiming(TSL2561_INTEGRATIONTIME_13MS);  // shortest integration time (bright light)
+  //tsl.setTiming(TSL2561_INTEGRATIONTIME_101MS);  // medium integration time (medium light)
+  //tsl.setTiming(TSL2561_INTEGRATIONTIME_402MS);  // longest integration time (dim light)
   
-  dataFile.print("Luminosity: ");
-  dataFile.println(event.light);
-}
-
+  // Simple data read example. Just read the infrared, fullspecrtrum diode 
+  // or 'visible' (difference between the two) channels.
+  // This can take 13-402 milliseconds! Uncomment whichever of the following you want to read
+  uint16_t x = tsl.getLuminosity(TSL2561_VISIBLE);     
+  //uint16_t x = tsl.getLuminosity(TSL2561_FULLSPECTRUM);
+  //uint16_t x = tsl.getLuminosity(TSL2561_INFRARED);
+  
+  // More advanced data read example. Read 32 bits with top 16 bits IR, bottom 16 bits full spectrum
+  // That way you can do whatever math and comparisons you want!
+  uint32_t lum = tsl.getFullLuminosity();
+  uint16_t ir, full;
+  ir = lum >> 16;
+  full = lum & 0xFFFF;
+  Serial.print("IR: "); Serial.print(ir);   Serial.print("\t");
+  Serial.print("Full: "); Serial.print(full);   Serial.print("\t");
+  Serial.print("Visible: "); Serial.print(full - ir);   Serial.print("\t");
+  Serial.print("Lux: "); Serial.println(tsl.calculateLux(full, ir));
+  
+  dataFile.print("IR: "); dataFile.print(ir);   dataFile.print("\t");
+  dataFile.print("Full: "); dataFile.print(full);   dataFile.print("\t");
+  dataFile.print("Visible: "); dataFile.print(full - ir);   dataFile.print("\t");
+  dataFile.print("Lux: "); dataFile.println(tsl.calculateLux(full, ir));
+  
+  
+} //End of getLuminosityData()
 void getHumidityData()
 {
   DHT dht(DHTPIN, DHTTYPE);
   dht.begin();
   // Reading temperature or humidity takes about 250 milliseconds
-  // Sensor readings may also be up to 2 seconds
+  // Sensor readings may also be up to 2 seconds because this is a digital sensor
   float h = dht.readHumidity();
   float t = dht.readTemperature();
 
@@ -323,4 +357,8 @@ void getHumidityData()
   dataFile.println(h);
   dataFile.print("Temperature: ");
   dataFile.println(t);
-}
+  Serial.print("Humidity: " );
+  Serial.println(h);
+  Serial.println("Temperature: ");
+  Serial.println(t);
+} //End of getHumidityData()
