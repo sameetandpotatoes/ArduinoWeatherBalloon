@@ -22,8 +22,8 @@
 ![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0039.JPG)
 
 # Schematic
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/Breadboard.png)
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/Schematic.png)
+![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Breadboard.png)
+![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Schematic.png)
 
 # Extra
 
