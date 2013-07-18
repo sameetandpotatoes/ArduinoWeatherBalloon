@@ -31,6 +31,22 @@
 #define chipSelectPin 9
 #define shutDown 7
 
+/*
+MPL115A1 sparkfun breakout baropressure meter
+ For Arduino Uno:
+ SDN       : pin 7
+ CSN       : pin 10
+ SDI/MOSI  : pin 11
+ SDO/MISO  : pin 12
+ SCK       : pin 13
+ For Arduino Mega:
+ SDN       : pin 7
+ CSN       : pin 10 (we used Pin 9 because the SD card requires pin 10
+ SDI/MOSI  : pin 51
+ SDO/MISO  : pin 50
+ SCK       : pin 52
+*/
+
 //Real time clock variable
 RTC_DS1307 RTC;
 
@@ -69,7 +85,7 @@ void loop()
   {      
     dataFile = SD.open("datalog.txt", FILE_WRITE); //Opening and closing the SD Card once, instead of after reading each sensor
     int i = 0;    
-    for (i = 0; i < 9; i++)
+    for (i = 0; i < 8; i++)
     {
       switch (i)
       {
@@ -77,27 +93,24 @@ void loop()
           getGeigerData();
           break;
         case 1: 
-          getGas1Data();
+          getGasData();
           break;
         case 2: 
-          getGas2Data();
-          break;
-        case 3: 
           getGPSData();
           break;
-        case 4: 
+        case 3: 
           getHumidityData();
           break;
-        case 5: 
+        case 4: 
           getBarometerData();
           break;
-        case 6: 
+        case 5: 
           getAccelerometerData(); 
           break;
-        case 7: 
+        case 6: 
           getLuminosityData(); 
           break;
-        case 8: 
+        case 7: 
           getClockData(); 
           break;
         }
@@ -112,17 +125,11 @@ void getGeigerData()
   dataFile.println(analogRead(13));
   Serial.println("Geiger: " + analogRead(13));
 } //end of getGeigerData()
-void getGas1Data()
-{
-  dataFile.print("Inside Gas Sensor: ");
-  dataFile.println(analogRead(14));
-  Serial.println("Gas 1: " + analogRead(14));
-} //end of getGas1Data()
-void getGas2Data()
+void getGasData()
 {
   dataFile.print("Outside Gas Sensor: ");
   dataFile.println(analogRead(15));
-  Serial.println("Gas 2: " + analogRead(15));
+  Serial.println("Gas 2: " + analogRead(14));
 } //end of getGas2Data()
 void getGPSData()
 {  
