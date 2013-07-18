@@ -70,7 +70,6 @@ void setup()
   
   //For debugging the code
   Serial.begin(9600);
-  
   RTC.adjust(DateTime(__DATE__, __TIME__));
 } // end of setup
 
@@ -124,7 +123,7 @@ void getGeigerData()
 } //end of getGeigerData()
 void getGasData()
 {
-  dataFile.print("Outside Gas Sensor: ");
+  dataFile.print("Parts Per Millon of Hydrogen Gas: ");
   dataFile.println(analogRead(15));
 } //end of getGas2Data()
 void getGPSData()
@@ -160,19 +159,22 @@ void getGPSData()
 void getClockData()
 {
    DateTime now = RTC.now(); 
-   dataFile.print(now.year(), DEC);
-   dataFile.print('/');
-   dataFile.print(now.month(), DEC);
-   dataFile.print('/');
-   dataFile.print(now.day(), DEC);
-   dataFile.print(' ');
-   dataFile.print(now.hour(), DEC);
-   dataFile.print(':');
-   dataFile.print(now.minute(), DEC);
-   dataFile.print(':');
-   dataFile.print(now.second(), DEC);
-   dataFile.println();
-   dataFile.println(); //Extra new line for increased readability on the SD Card
+   if (now.year() == 2013)
+   {
+     dataFile.print(now.year(), DEC);
+     dataFile.print('/');
+     dataFile.print(now.month(), DEC);
+     dataFile.print('/');
+     dataFile.print(now.day(), DEC);
+     dataFile.print(' ');
+     dataFile.print(now.hour(), DEC);
+     dataFile.print(':');
+     dataFile.print(now.minute(), DEC);
+     dataFile.print(':');
+     dataFile.print(now.second(), DEC);
+     dataFile.println();
+     dataFile.println();
+   } //Extra new line for increased readability on the SD Card
 } //end of getClockData()
 //Helper method for reading the barometer
 unsigned int readRegister(byte thisRegister)
@@ -241,7 +243,7 @@ void getBarometerData()
   
     float pressure = A0_+(B1_+C12_*temp)*press+B2_*temp;
     float preskPa = pressure*  (65.0/1023.0)+50.0; //Converting pressure to kilopascals
-    if (preskPa != 50.00)
+    if (preskPa != (float)(50.00) && preskPa < 110.00)
     {
         dataFile.print("Barometer Presure (kPa): ");
         dataFile.println(preskPa);
@@ -333,8 +335,6 @@ void getLuminosityData()
   dataFile.print("Full: "); dataFile.print(full);   dataFile.print("\t");
   dataFile.print("Visible: "); dataFile.print(full - ir);   dataFile.print("\t");
   dataFile.print("Lux: "); dataFile.println(tsl.calculateLux(full, ir));
-  
-  
 } //End of getLuminosityData()
 void getHumidityData()
 {
