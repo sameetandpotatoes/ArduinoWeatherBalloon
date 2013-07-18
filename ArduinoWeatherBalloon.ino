@@ -71,11 +71,7 @@ void setup()
   //For debugging the code
   Serial.begin(9600);
   
-  if (!RTC.isrunning())
-  {
-    // following line sets the RTC to the date & time this sketch was compiled as a fail-safe
-    RTC.adjust(DateTime(__DATE__, __TIME__));
-  }
+  RTC.adjust(DateTime(__DATE__, __TIME__));
 } // end of setup
 
 void loop()
@@ -116,20 +112,20 @@ void loop()
         }
     }
     dataFile.close(); //Closing data file
+    Serial.println("Data was written");
     previousMillis = currentMillis;  //Resetting timer   
   }
 } // end of loop
 void getGeigerData()
 {
   dataFile.print("Geiger: ");
-  dataFile.println(analogRead(13));
-  Serial.println("Geiger: " + analogRead(13));
+  int data = abs(analogRead(13) - 1024);
+  dataFile.println(data);
 } //end of getGeigerData()
 void getGasData()
 {
   dataFile.print("Outside Gas Sensor: ");
   dataFile.println(analogRead(15));
-  Serial.println("Gas 2: " + analogRead(14));
 } //end of getGas2Data()
 void getGPSData()
 {  
@@ -148,8 +144,6 @@ void getGPSData()
       return;  // we can fail to parse a sentence in which case we should just wait for another
   }    
   dataFile.print("Fix: "); dataFile.print((int)GPS.fix);
-  Serial.print((int)GPS.fix);
-  Serial.println((int) GPS.fixquality);
   dataFile.print(" quality: "); dataFile.println((int)GPS.fixquality); 
   if (GPS.fix) //If we get a fix, print the rest of the data
   {
@@ -179,7 +173,6 @@ void getClockData()
    dataFile.print(now.second(), DEC);
    dataFile.println();
    dataFile.println(); //Extra new line for increased readability on the SD Card
-   Serial.println(now.year(), DEC);
 } //end of getClockData()
 //Helper method for reading the barometer
 unsigned int readRegister(byte thisRegister)
@@ -250,8 +243,6 @@ void getBarometerData()
     float preskPa = pressure*  (65.0/1023.0)+50.0; //Converting pressure to Pascals
     dataFile.print("Barometer Presure (pa): ");
     dataFile.println(preskPa);
-    Serial.print("Barometer Pressure: ");
-    Serial.println(preskPa);
 } //end of getBarometerData()
 void getAccelerometerData()
 {
@@ -307,10 +298,6 @@ void getAccelerometerData()
   dataFile.print(" ");
   dataFile.print(zAng);
   dataFile.println();
-  Serial.print("Orientation: ");
-  Serial.print(xAng);
-  Serial.print(yAng);
-  Serial.println(zAng);
 } //end of getAccelerometerData()
 void getLuminosityData()
 {
@@ -338,12 +325,7 @@ void getLuminosityData()
   uint32_t lum = tsl.getFullLuminosity();
   uint16_t ir, full;
   ir = lum >> 16;
-  full = lum & 0xFFFF;
-  Serial.print("IR: "); Serial.print(ir);   Serial.print("\t");
-  Serial.print("Full: "); Serial.print(full);   Serial.print("\t");
-  Serial.print("Visible: "); Serial.print(full - ir);   Serial.print("\t");
-  Serial.print("Lux: "); Serial.println(tsl.calculateLux(full, ir));
-  
+  full = lum & 0xFFFF; 
   dataFile.print("IR: "); dataFile.print(ir);   dataFile.print("\t");
   dataFile.print("Full: "); dataFile.print(full);   dataFile.print("\t");
   dataFile.print("Visible: "); dataFile.print(full - ir);   dataFile.print("\t");
@@ -364,8 +346,4 @@ void getHumidityData()
   dataFile.println(h);
   dataFile.print("Temperature: ");
   dataFile.println(t);
-  Serial.print("Humidity: " );
-  Serial.println(h);
-  Serial.println("Temperature: ");
-  Serial.println(t);
 } //End of getHumidityData()
