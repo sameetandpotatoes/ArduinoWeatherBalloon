@@ -112,7 +112,7 @@ void loop()
         }
     }
     dataFile.close(); //Closing data file
-    Serial.println("Data was written");
+    Serial.println("Data was written.");
     previousMillis = currentMillis;  //Resetting timer   
   }
 } // end of loop
@@ -240,9 +240,12 @@ void getBarometerData()
     unsigned long temp  = ((tempH *256) + tempL)/64;
   
     float pressure = A0_+(B1_+C12_*temp)*press+B2_*temp;
-    float preskPa = pressure*  (65.0/1023.0)+50.0; //Converting pressure to Pascals
-    dataFile.print("Barometer Presure (pa): ");
-    dataFile.println(preskPa);
+    float preskPa = pressure*  (65.0/1023.0)+50.0; //Converting pressure to kilopascals
+    if (preskPa != 50.00)
+    {
+        dataFile.print("Barometer Presure (kPa): ");
+        dataFile.println(preskPa);
+    }
 } //end of getBarometerData()
 void getAccelerometerData()
 {
@@ -344,6 +347,9 @@ void getHumidityData()
 
   dataFile.print("Humidity: ");
   dataFile.println(h);
-  dataFile.print("Temperature: ");
+  dataFile.print("Temperature (Celsius): ");
+  dataFile.println(t);
+  dataFile.print("Temperature (Fahrenheit): ");
+  t = (t * (1.8)) + 32;
   dataFile.println(t);
 } //End of getHumidityData()
