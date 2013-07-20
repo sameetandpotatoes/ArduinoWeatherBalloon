@@ -25,6 +25,20 @@
 ![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Breadboard.png)
 ![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Schematic.png)
 
+# Sample Data (from DATALOG.txt file on SD Card)
+
+Geiger: 22
+Outside Gas Sensor: 633
+Fix: 0 quality: 0 (no GPS signal when we tried)
+Humidity: 39.00
+Temperature (Celsius): 27.00
+Temperature (Fahrenheit): 80.60
+Barometer Presure (kPa): 99.04
+Orientation: 90 11 90
+IR: 28    Full: 59    Visible: 31    Lux: 15
+2013/7/18 10:49:14
+
+
 # Extra
 
 This project was added on [this repository](https://github.com/erichaddleton/porkycam) for a weather balloon that takes pictures every ten seconds.
