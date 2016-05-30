@@ -1,5 +1,9 @@
+# GitHub Pages Website
+
+See the [GitHub static pages website](http://sameetandpotatoes.github.io/ArduinoWeatherBalloon/) for more information
+
 # Purpose
-  The goal of this project is to launch a balloon containing a payload that uses various sensors powered by an Arduino Mega to record variables from the environment at 100,000 feet. The program writes the outputs of all of these sensors to an 8 GB SD Card on the Arduino Mega itself. The Arduino Mega uses a solar panel to recharge its battery. 
+The goal of this project is to launch a balloon containing a payload that uses various sensors powered by an Arduino Mega to record variables from the environment at 100,000 feet. The program writes the outputs of all of these sensors to an 8 GB SD Card on the Arduino Mega itself. The Arduino Mega uses a solar panel to recharge its battery. 
 
 # Hardware Parts List
 - [Arduino Mega](http://www.adafruit.com/products/191)
@@ -13,20 +17,13 @@
 - [Luminosity Sensor](http://www.adafruit.com/products/439)
 - Real Time Clock (comes with Data Logger Shield Kit)
 
-# Wiring
+# Pictures
 
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0010.JPG)
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0024.JPG)
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0026.JPG)
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0029.JPG)
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0039.JPG)
+See pictures and more on the GitHub pages website: http://sameetandpotatoes.github.io/ArduinoWeatherBalloon/
 
-# Schematic
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Breadboard.png)
-![ScreenShot](https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Schematic.png)
+# Sample Data
 
-# Sample Data (from DATALOG.txt file on SD Card)
-
+```
 Geiger: 22
 
 Outside Gas Sensor: 633
@@ -46,8 +43,7 @@ Orientation: 90 11 90
 IR: 28    Full: 59    Visible: 31    Lux: 15
 
 2013/7/18 10:49:14
-
-
+```
 
 # Extra
 
