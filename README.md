@@ -44,7 +44,6 @@ IR: 28    Full: 59    Visible: 31    Lux: 15
 
 2013/7/18 10:49:14
 ```
-
 # Extra
 
 This project was added on [this repository](https://github.com/erichaddleton/porkycam) for a weather balloon that takes pictures every ten seconds.
