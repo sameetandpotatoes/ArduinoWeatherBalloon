@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Arduinoweatherballoon by sameetandpotatoes</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Arduinoweatherballoon</h1>
+        <h2>Weather balloon that records various statistics using an Arduino Mega.</h2>
+        <a href="https://github.com/sameetandpotatoes/ArduinoWeatherBalloon" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="purpose" class="anchor" href="#purpose" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Purpose</h1>
+
+<p>The goal of this project is to launch a balloon containing a payload that uses various sensors powered by an Arduino Mega to record variables from the environment at 100,000 feet. The program writes the outputs of all of these sensors to an 8 GB SD Card on the Arduino Mega itself. The Arduino Mega uses a solar panel to recharge its battery. </p>
+
+<h1>
+<a id="hardware-parts-list" class="anchor" href="#hardware-parts-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hardware Parts List</h1>
+
+<ul>
+<li><a href="http://www.adafruit.com/products/191">Arduino Mega</a></li>
+<li><a href="http://www.adafruit.com/products/1141">Data Logger Shield Kit</a></li>
+<li><a href="https://www.sparkfun.com/products/11345">Geiger Counter</a></li>
+<li><a href="https://www.sparkfun.com/products/10916">Gas Sensors</a></li>
+<li><a href="http://www.adafruit.com/products/1059">GPS Flora</a></li>
+<li><a href="http://www.adafruit.com/products/386">Humidity and Temperature Sensor</a></li>
+<li><a href="https://www.sparkfun.com/products/9721">Barometer Sensor</a></li>
+<li><a href="http://www.adafruit.com/products/1120">Accelerometer Sensor</a></li>
+<li><a href="http://www.adafruit.com/products/439">Luminosity Sensor</a></li>
+<li>Real Time Clock (comes with Data Logger Shield Kit)</li>
+</ul>
+
+<h1>
+<a id="wiring" class="anchor" href="#wiring" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Wiring</h1>
+
+<p><img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0044.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0045.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0046.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0047.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0048.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0062.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0063.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0064.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0065.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0066.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0067.JPG" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Pictures/IMG_0068.JPG" alt="ScreenShot"></p>
+
+<h1>
+<a id="schematic" class="anchor" href="#schematic" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Schematic</h1>
+
+<p><img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Breadboard.png" alt="ScreenShot">
+<img src="https://raw.github.com/sameetandpotatoes/ArduinoWeatherBalloon/master/Schematic.png" alt="ScreenShot"></p>
+
+<h1>
+<a id="sample-data-from-datalogtxt-file-on-sd-card" class="anchor" href="#sample-data-from-datalogtxt-file-on-sd-card" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sample Data (from DATALOG.txt file on SD Card)</h1>
+
+<p>Geiger: 22</p>
+
+<p>Outside Gas Sensor: 633</p>
+
+<p>Fix: 0 quality: 0 (no GPS signal when we tried)</p>
+
+<p>Humidity: 39.00</p>
+
+<p>Temperature (Celsius): 27.00</p>
+
+<p>Temperature (Fahrenheit): 80.60</p>
+
+<p>Barometer Presure (kPa): 99.04</p>
+
+<p>Orientation: 90 11 90</p>
+
+<p>IR: 28    Full: 59    Visible: 31    Lux: 15</p>
+
+<p>2013/7/18 10:49:14</p>
+
+<h1>
+<a id="extra" class="anchor" href="#extra" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Extra</h1>
+
+<p>This project was added on <a href="https://github.com/erichaddleton/porkycam">this repository</a> for a weather balloon that takes pictures every ten seconds.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/sameetandpotatoes/ArduinoWeatherBalloon/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/sameetandpotatoes/ArduinoWeatherBalloon/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/sameetandpotatoes/ArduinoWeatherBalloon"></a> is maintained by <a href="https://github.com/sameetandpotatoes">sameetandpotatoes</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
