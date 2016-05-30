@@ -766,6 +766,22 @@ footer a:hover {
   content: '.';
 }
 
+/* Custom */
+.image-container{
+  display: inline-block;
+  text-align: center;
+}
+img.image:nth-child(2) {
+    padding-left: 1%;
+}
+img.image:nth-child(1) {
+    padding-right: 1%;
+}
+img.image {
+    width: 48%;
+    display: inline-block;
+}
+
 .clearfix {display: inline-block;}
 * html .clearfix {height: 1%;}
 .clearfix {display: block;}
